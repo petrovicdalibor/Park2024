@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Park2024.Models
 {
+    [Table(name: "korisnik")]
     public class Korisnik
     {
         [Key, ForeignKey("User")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public virtual ApplicationUser User { get; set; }
     }

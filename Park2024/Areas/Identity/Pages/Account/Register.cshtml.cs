@@ -30,15 +30,13 @@ namespace Park2024.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,7 +44,6 @@ namespace Park2024.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -136,24 +133,14 @@ namespace Park2024.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-               /* var roles = _roleManager.Roles.ToList();
-                bool role = await _roleManager.RoleExistsAsync("Korisnik");
-                bool roleSopst = await _roleManager.RoleExistsAsync("Sopstvenik");
-
-                if (!role) {
-                   await _roleManager.CreateAsync(new IdentityRole("Korisnik"));
-                }
-                if (!roleSopst)
-                {
-                    await _roleManager.CreateAsync(new IdentityRole("Sopstvenik"));
-                }*/
 
                 if (Input.UserType == 0)
                 {
 
                     await _userManager.AddToRoleAsync(user, "Korisnik");
                     user.Korisnik = new Korisnik();
-                    
+                    user.Korisnik.User = user;
+
                 } else if (Input.UserType == 1)
                 {
                     await _userManager.AddToRoleAsync(user, "Sopstvenik");

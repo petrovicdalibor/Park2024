@@ -6,7 +6,7 @@ using Park2024.Models;
 
 namespace Park2024.Data
 {
-	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+	public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 	{
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -21,32 +21,32 @@ namespace Park2024.Data
 		{
 			base.OnModelCreating(builder);
 			builder.HasDefaultSchema("INDO_183284_183269");
-			builder.Entity<IdentityUser>(e =>
+			builder.Entity<IdentityUser<int>>(e =>
 			{
-				e.ToTable(name: "User");
+				e.ToTable(name: "profil");
 			});
-            builder.Entity<IdentityRole>(e =>
+            builder.Entity<IdentityRole<int>>(e =>
             {
                 e.ToTable("Role");
             });
 
-            builder.Entity<IdentityUserRole<string>>(e =>
+            builder.Entity<IdentityUserRole<int>>(e =>
 			{
 				e.ToTable("UserRoles");
 			});
-			builder.Entity<IdentityUserClaim<string>>(e =>
+			builder.Entity<IdentityUserClaim<int>>(e =>
 			{
 				e.ToTable("UserClaims");
 			});
-			builder.Entity<IdentityUserLogin<string>>(e =>
+			builder.Entity<IdentityUserLogin<int>>(e =>
 			{
 				e.ToTable("UserLogins");
 			});
-			builder.Entity<IdentityRoleClaim<string>>(e =>
+			builder.Entity<IdentityRoleClaim<int>>(e =>
 			{
 				e.ToTable("RoleClaims");
 			});
-			builder.Entity<IdentityUserToken<string>>(e =>
+			builder.Entity<IdentityUserToken<int>>(e =>
 			{
 				e.ToTable("UserTokens");
 			});
@@ -57,6 +57,16 @@ namespace Park2024.Data
             builder.Entity<Sopstvenik>(e =>
             {
                 e.ToTable("sopstvenik");
+                e.HasMany(e => e.Parkings)
+                    .WithOne(e => e.Sopstvenik);
+            });
+
+            builder.Entity<Parking>(e =>
+            {
+                e.HasOne(e => e.Sopstvenik)
+                    .WithMany(e => e.Parkings)
+                    .HasForeignKey(e => e.Sopstvenik_Id)
+                    .IsRequired();
             });
         }
 	}

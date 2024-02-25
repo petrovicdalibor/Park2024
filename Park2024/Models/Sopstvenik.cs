@@ -3,12 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Park2024.Models
 {
-  
+    [Table(name:"sopstvenik")]
     public class Sopstvenik
     {
         [Key, ForeignKey("User")] 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+        public virtual IList<Parking> Parkings { get; set; }
     }
 }

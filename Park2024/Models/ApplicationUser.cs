@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace Park2024.Models
 {
-	public class ApplicationUser : IdentityUser
+	[Table(name:"profil")]
+	public class ApplicationUser : IdentityUser<int>
 	{
 		public string Ime { get; set; }
 		public string Telefon { get; set; }

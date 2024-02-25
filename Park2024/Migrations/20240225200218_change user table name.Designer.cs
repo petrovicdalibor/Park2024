@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Park2024.Data;
@@ -11,9 +12,11 @@ using Park2024.Data;
 namespace Park2024.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240225200218_change user table name")]
+    partial class changeusertablename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,7 +131,7 @@ namespace Park2024.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("profil", "INDO_183284_183269");
+                    b.ToTable("Profil", "INDO_183284_183269");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -295,40 +298,6 @@ namespace Park2024.Migrations
                     b.ToTable("korisnik", "INDO_183284_183269");
                 });
 
-            modelBuilder.Entity("Park2024.Models.Parking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Br_Mesta")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Cena")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Grad_Id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Sopstvenik_Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Ulica")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Zona_Id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Sopstvenik_Id");
-
-                    b.ToTable("Parking", "INDO_183284_183269");
-                });
-
             modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
                 {
                     b.Property<int>("Id")
@@ -401,17 +370,6 @@ namespace Park2024.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Park2024.Models.Parking", b =>
-                {
-                    b.HasOne("Park2024.Models.Sopstvenik", "Sopstvenik")
-                        .WithMany("Parkings")
-                        .HasForeignKey("Sopstvenik_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sopstvenik");
-                });
-
             modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
                 {
                     b.HasOne("Park2024.Models.ApplicationUser", "User")
@@ -430,11 +388,6 @@ namespace Park2024.Migrations
 
                     b.Navigation("Sopstvenik")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
-                {
-                    b.Navigation("Parkings");
                 });
 #pragma warning restore 612, 618
         }
