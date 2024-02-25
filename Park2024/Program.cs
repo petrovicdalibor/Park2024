@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Park2024.Data;
+using Park2024.Models;
 
 namespace Park2024
 {
@@ -14,10 +15,36 @@ namespace Park2024
 			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
-			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+   //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+   //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o => o.SignIn.RequireConfirmedAccount = false)
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultUI()
+				.AddDefaultTokenProviders();
+
+			builder.Services.Configure<IdentityOptions>(options =>
+			{
+				// Password settings.
+				options.Password.RequireDigit = true;
+				options.Password.RequireLowercase = true;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
+				options.Password.RequiredLength = 6;
+				options.Password.RequiredUniqueChars = 0;
+
+				// Lockout settings.
+				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+				options.Lockout.MaxFailedAccessAttempts = 7;
+				options.Lockout.AllowedForNewUsers = true;
+
+				// User settings.
+				options.User.AllowedUserNameCharacters =
+					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.RequireUniqueEmail = false;
+			});
+
 			builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
@@ -46,7 +73,9 @@ namespace Park2024
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 			app.MapRazorPages();
 
-			app.Run();
-		}
+            app.Run();
+
+            SampleData.Initialize(app.Services);
+        }
 	}
 }
