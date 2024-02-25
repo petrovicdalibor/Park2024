@@ -20,7 +20,7 @@ namespace Park2024.Data
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-			builder.HasDefaultSchema("Identity");
+			builder.HasDefaultSchema("INDO_183284_183269");
 			builder.Entity<IdentityUser>(e =>
 			{
 				e.ToTable(name: "User");
@@ -50,6 +50,14 @@ namespace Park2024.Data
 			{
 				e.ToTable("UserTokens");
 			});
-		}
+            builder.Entity<Korisnik>(e =>
+            {
+                e.ToTable("korisnik");
+            });
+            builder.Entity<Sopstvenik>(e =>
+            {
+                e.ToTable("sopstvenik");
+            });
+        }
 	}
 }

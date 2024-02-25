@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Park2024.Data;
 using Park2024.Models;
+using Renci.SshNet;
 
 namespace Park2024
 {
@@ -12,13 +14,24 @@ namespace Park2024
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+			var firstClient =
+				new SshClient("194.149.135.130", "t_park2024", "372a188e");
+			firstClient.Connect();
+
+			var port = new ForwardedPortLocal("localhost", "localhost", 5432);
+			firstClient.AddForwardedPort(port);
+			port.Start();
+
+			string connString = $"Server={port.BoundHost};Database=db_202324z_va_prj_park2024;Port={port.BoundPort};" + "User Id=db_202324z_va_prj_park2024_owner;Password=d39d16359da;";
+
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString));
+				options.UseNpgsql(connString));
 
-   //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+			//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-   //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o => o.SignIn.RequireConfirmedAccount = false)
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultUI()

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Park2024.Models
 {
+  
     public class Sopstvenik
     {
         [Key, ForeignKey("User")] 
