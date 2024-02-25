@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Park2024.Data;
 
@@ -11,9 +12,11 @@ using Park2024.Data;
 namespace Park2024.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240225124035_Added Custom Properties1")]
+    partial class AddedCustomProperties1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,10 +230,6 @@ namespace Park2024.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Ime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -257,10 +256,6 @@ namespace Park2024.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Telefon")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -279,26 +274,6 @@ namespace Park2024.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", "Identity");
-                });
-
-            modelBuilder.Entity("Park2024.Models.Korisnik", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Korisnici", "Identity");
-                });
-
-            modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sopstvenici", "Identity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -349,37 +324,6 @@ namespace Park2024.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Park2024.Models.Korisnik", b =>
-                {
-                    b.HasOne("Park2024.Models.ApplicationUser", "User")
-                        .WithOne("Korisnik")
-                        .HasForeignKey("Park2024.Models.Korisnik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
-                {
-                    b.HasOne("Park2024.Models.ApplicationUser", "User")
-                        .WithOne("Sopstvenik")
-                        .HasForeignKey("Park2024.Models.Sopstvenik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Park2024.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Korisnik")
-                        .IsRequired();
-
-                    b.Navigation("Sopstvenik")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

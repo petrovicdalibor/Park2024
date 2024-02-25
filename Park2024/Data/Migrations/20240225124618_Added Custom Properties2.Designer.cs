@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Park2024.Data;
 
@@ -11,9 +12,11 @@ using Park2024.Data;
 namespace Park2024.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240225124618_Added Custom Properties2")]
+    partial class AddedCustomProperties2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,26 +284,6 @@ namespace Park2024.Data.Migrations
                     b.ToTable("AspNetUsers", "Identity");
                 });
 
-            modelBuilder.Entity("Park2024.Models.Korisnik", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Korisnici", "Identity");
-                });
-
-            modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sopstvenici", "Identity");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -349,37 +332,6 @@ namespace Park2024.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Park2024.Models.Korisnik", b =>
-                {
-                    b.HasOne("Park2024.Models.ApplicationUser", "User")
-                        .WithOne("Korisnik")
-                        .HasForeignKey("Park2024.Models.Korisnik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Park2024.Models.Sopstvenik", b =>
-                {
-                    b.HasOne("Park2024.Models.ApplicationUser", "User")
-                        .WithOne("Sopstvenik")
-                        .HasForeignKey("Park2024.Models.Sopstvenik", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Park2024.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Korisnik")
-                        .IsRequired();
-
-                    b.Navigation("Sopstvenik")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
