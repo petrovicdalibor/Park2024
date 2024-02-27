@@ -11,5 +11,8 @@
         public int Grad_Id { get; set; }
 
         public virtual Sopstvenik Sopstvenik { get; set; }
+        public virtual Zona Zona { get; set; }
+        public virtual Grad Grad { get; set; }
+        public virtual IList<Zalbi> Zalbi { get; set; }
     }
 }

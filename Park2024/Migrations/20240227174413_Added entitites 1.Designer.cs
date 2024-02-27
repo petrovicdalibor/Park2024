@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Park2024.Data;
@@ -11,9 +12,11 @@ using Park2024.Data;
 namespace Park2024.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240227174413_Added entitites 1")]
+    partial class Addedentitites1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,7 +302,7 @@ namespace Park2024.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Grad", "INDO_183284_183269");
+                    b.ToTable("grad", "INDO_183284_183269");
                 });
 
             modelBuilder.Entity("Park2024.Models.Korisnik", b =>
@@ -316,8 +319,7 @@ namespace Park2024.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -330,12 +332,6 @@ namespace Park2024.Migrations
                     b.Property<int>("Grad_Id")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Gradid")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SopstvenikId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Sopstvenik_Id")
                         .HasColumnType("integer");
 
@@ -346,16 +342,13 @@ namespace Park2024.Migrations
                     b.Property<int>("Zona_Id")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Zonaid")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Gradid");
+                    b.HasIndex("Grad_Id");
 
-                    b.HasIndex("SopstvenikId");
+                    b.HasIndex("Sopstvenik_Id");
 
-                    b.HasIndex("Zonaid");
+                    b.HasIndex("Zona_Id");
 
                     b.ToTable("parking", "INDO_183284_183269");
                 });
@@ -378,9 +371,6 @@ namespace Park2024.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("ParkingId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("korisnik_id")
                         .HasColumnType("integer");
 
@@ -397,11 +387,11 @@ namespace Park2024.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("ParkingId");
-
                     b.HasIndex("korisnik_id");
 
-                    b.ToTable("Zalbi", "INDO_183284_183269");
+                    b.HasIndex("parking_id");
+
+                    b.ToTable("zalbi", "INDO_183284_183269");
                 });
 
             modelBuilder.Entity("Park2024.Models.Zona", b =>
@@ -418,7 +408,7 @@ namespace Park2024.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Zona", "INDO_183284_183269");
+                    b.ToTable("zona", "INDO_183284_183269");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -487,19 +477,19 @@ namespace Park2024.Migrations
                 {
                     b.HasOne("Park2024.Models.Grad", "Grad")
                         .WithMany("Parkings")
-                        .HasForeignKey("Gradid")
+                        .HasForeignKey("Grad_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Park2024.Models.Sopstvenik", "Sopstvenik")
                         .WithMany("Parkings")
-                        .HasForeignKey("SopstvenikId")
+                        .HasForeignKey("Sopstvenik_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Park2024.Models.Zona", "Zona")
                         .WithMany("Parkings")
-                        .HasForeignKey("Zonaid")
+                        .HasForeignKey("Zona_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -523,15 +513,15 @@ namespace Park2024.Migrations
 
             modelBuilder.Entity("Park2024.Models.Zalbi", b =>
                 {
-                    b.HasOne("Park2024.Models.Parking", "Parking")
-                        .WithMany("Zalbi")
-                        .HasForeignKey("ParkingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Park2024.Models.Korisnik", "Korisnik")
                         .WithMany("Zalbi")
                         .HasForeignKey("korisnik_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Park2024.Models.Parking", "Parking")
+                        .WithMany("Zalbi")
+                        .HasForeignKey("parking_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
